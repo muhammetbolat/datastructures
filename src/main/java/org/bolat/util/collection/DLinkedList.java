@@ -78,6 +78,27 @@ public class DLinkedList<T> {
 
         return oldTail;
     }
+
+    public T deleteItem(int index) {
+        if (index < 0 || index >= m_size || m_head == null)
+            throw new ArrayIndexOutOfBoundsException("Index must be index < 0 || index >= m_size");
+
+        if (index == 0)
+            return removeHead();
+        else if (index == m_size - 1)
+            return removeTail();
+        else {
+            Node<T> curNode = m_head;
+
+            for (int i = 0; i < index; i++, curNode = curNode.next);
+
+            curNode.prev.next = curNode.next;
+            curNode.next.prev = curNode.prev;
+            m_size--;
+            return curNode.elem;
+        }
+    }
+
     public void clearFromHead() {
         while (m_head != null)
             removeHead();
@@ -87,11 +108,56 @@ public class DLinkedList<T> {
         while (m_tail != null)
             removeTail();
     }
+    public void clear() {
+        for (Node<T> node = m_head; node !=  null; node = node.next)
+            node.prev = null;
+
+        m_head = m_tail = null;
+        m_size = 0;
+    }
     public int size() { return m_size; }
 
     public void walkList(Consumer<T> consumer) {
         for(Node<T> node = m_head; node != null; node = node.next)
             consumer.accept(node.elem);
+    }
+
+    public boolean isEmpty() {
+        return m_head == null;
+    }
+
+    public Optional<T> getItemHead() {
+        return isEmpty() ? Optional.empty(): Optional.of(m_head.elem);
+    }
+
+    public Optional<T> getItemTail() {
+        return isEmpty() ? Optional.empty(): Optional.of(m_tail.elem);
+    }
+
+    public T get(int index) {
+        if (m_head == null || index < 0 || index >= size())
+            throw new IllegalArgumentException("Invalid index");
+
+        Node<T> curNode = m_head;
+
+        for (int i = 0; i < index; i++, curNode = curNode.next);
+
+        return curNode.elem;
+    }
+
+    public void insertItem(int pos, T value) {
+        if (m_head == null || pos < 0 || pos > m_size)
+           throw new IndexOutOfBoundsException("Invalid index");
+        Node<T> curNode = m_head;
+
+        for (int i = 0; i < pos; i++, curNode = curNode.next);
+
+        Node<T> newNode = new Node<>(value);
+        newNode.next = curNode.next;
+        curNode.next = newNode;
+        newNode.prev = curNode;
+
+        m_size++;
     }
 
     public void walkListReversed(Consumer<T> consumer) {
