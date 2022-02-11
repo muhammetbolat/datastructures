@@ -81,6 +81,7 @@ public class DLinkedListTailTest {
     public void findTheFirst() {
         // given
         DLinkedList<String> linkedList = new DLinkedList<>();
+        String actual = "Can";
 
         // then
         for (String srtVal: m_list)
@@ -88,8 +89,9 @@ public class DLinkedListTailTest {
 
         Optional<String> result = linkedList.walkListReversed(val -> val.length() == 3);
 
+        // expected
         assertTrue(result.isPresent());
-        assertEquals(result.get(), "Can");
+        assertEquals(result.get(), actual);
     }
 
     @Test

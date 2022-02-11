@@ -41,6 +41,6 @@ public class DLinkedListClearTest {
         linkedList.clear();
 
         // expected
-        assertEquals(linkedList.size(), 0);
+        assertEquals(0, linkedList.size());
     }
 }

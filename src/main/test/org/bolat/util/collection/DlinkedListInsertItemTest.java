@@ -5,20 +5,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
-public class DLinkedListInsertItem {
+public class DlinkedListInsertItemTest {
     private final ArrayList<String> m_list;
     private DLinkedList<String> linkedList;
 
-    public DLinkedListInsertItem(ArrayList<String> list) {
+    public DlinkedListInsertItemTest(ArrayList<String> list) {
         m_list = list;
     }
 
@@ -44,6 +41,6 @@ public class DLinkedListInsertItem {
         linkedList.clear();
 
         // expected
-        assertEquals(linkedList.size(), 0);
+        assertEquals(0, linkedList.size());
     }
 }

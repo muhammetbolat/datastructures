@@ -1,144 +1,198 @@
 package org.bolat.util.collection;
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class DLinkedList<T> {
-    private int m_size;
-    private Node<T> m_head;
-    private Node<T> m_tail;
+public class DLinkedList<T> implements Iterable<T> {
+    private int size;
+    private Node<T> head;
+    private Node<T> tail;
+
+    @Override
+    public Iterator<T> iterator() {
+        return new Iterator<>() {
+            private Node<T> curNode;
+            @Override
+            public boolean hasNext() {
+                curNode = curNode == null ? head: curNode.next;
+                return curNode != null;
+            }
+
+            @Override
+            public T next() {
+                if (curNode == null)
+                    throw new NoSuchElementException("No such element in list");
+
+                return curNode.elem;
+            }
+        };
+    }
 
     private static class Node<T> {
-        public Node<T> prev;
-        public Node<T> next;
-        public T elem;
+        private Node<T> prev;
+        private Node<T> next;
+        private final T elem;
         public Node(T elem) {
             this.elem = elem;
         }
 
     }
     public DLinkedList() {
-        m_size = 0;
+        size = 0;
     }
 
     public void addItemTail(T item) {
         Node<T> lastNode = new Node<>(item);
 
-        if (m_tail == null)
-            m_head = m_tail = lastNode;
+        if (tail == null)
+            head = tail = lastNode;
         else {
-            lastNode.prev = m_tail;
-            m_tail.next = lastNode;
-            m_tail = lastNode;
+            lastNode.prev = tail;
+            tail.next = lastNode;
+            tail = lastNode;
         }
-        m_size++;
+        size++;
     }
 
     public void addItemHead(T item) {
         Node<T> firstNode = new Node<>(item);
 
-        if (m_head == null)
-            m_head = m_tail = firstNode;
+        if (head == null)
+            head = tail = firstNode;
         else {
-            Node<T> secondNode = m_head;
-            m_head = firstNode;
+            Node<T> secondNode = head;
+            head = firstNode;
             firstNode.next = secondNode;
             secondNode.prev = firstNode;
         }
-        m_size++;
+        size++;
+    }
+
+    public int indexOf(T item) {
+        Node<T> curNode = head;
+        if (item != null) {
+            for (int i = 0; curNode != null; curNode = curNode.next, ++i)
+                if (curNode.elem.equals(item))
+                    return i;
+        }
+        else {
+            for (int i = 0; curNode != null; curNode = curNode.next, ++i)
+                if (curNode.elem == null)
+                    return i;
+        }
+        return -1;
+    }
+
+    public int lastIndexOf(T item) {
+        Node<T> curNode = tail;
+        if (item != null) {
+            for (int i = size - 1; curNode != null; curNode = curNode.prev, i--) {
+                if (curNode.elem.equals(item))
+                    return i;
+            }
+        }
+        else {
+            for (int i = size - 1; curNode != null; curNode = curNode.prev, i--) {
+                if (curNode.elem == null)
+                    return i;
+            }
+        }
+        return -1;
     }
 
     public T removeHead() {
-        if (m_head == null)
+        if (head == null)
             return null;
-        T oldVal = m_head.elem;
-        if (m_head == m_tail)
-            m_head = m_tail = null;
+        T oldVal = head.elem;
+        if (head == tail)
+            head = tail = null;
         else {
-            m_head = m_head.next;
-            m_head.prev = null;
+            head = head.next;
+            head.prev = null;
         }
-        m_size--;
+        size--;
 
       return oldVal;
     }
 
     public T removeTail() {
-        if (m_tail == null)
+        if (tail == null)
             return null;
-        T oldTail = m_tail.elem;
-        if (m_tail == m_head)
-            m_tail = m_head = null;
+        T oldTail = tail.elem;
+        if (tail == head)
+            tail = head = null;
         else {
-            m_tail = m_tail.prev;
-            m_tail.next = null;
+            tail = tail.prev;
+            tail.next = null;
         }
-        m_size--;
+        size--;
 
         return oldTail;
     }
 
     public T deleteItem(int index) {
-        if (index < 0 || index >= m_size || m_head == null)
+        if (index < 0 || index >= size || head == null)
             throw new ArrayIndexOutOfBoundsException("Index must be index < 0 || index >= m_size");
 
         if (index == 0)
             return removeHead();
-        else if (index == m_size - 1)
+        else if (index == size - 1)
             return removeTail();
         else {
-            Node<T> curNode = m_head;
+            Node<T> curNode = head;
 
             for (int i = 0; i < index; i++, curNode = curNode.next);
 
             curNode.prev.next = curNode.next;
             curNode.next.prev = curNode.prev;
-            m_size--;
+            size--;
             return curNode.elem;
         }
     }
 
     public void clearFromHead() {
-        while (m_head != null)
+        while (head != null)
             removeHead();
     }
 
     public void clearFromTail() {
-        while (m_tail != null)
+        while (tail != null)
             removeTail();
     }
     public void clear() {
-        for (Node<T> node = m_head; node !=  null; node = node.next)
+        for (Node<T> node = head; node !=  null; node = node.next)
             node.prev = null;
 
-        m_head = m_tail = null;
-        m_size = 0;
+        head = tail = null;
+        size = 0;
     }
-    public int size() { return m_size; }
+    public int size() { return size; }
 
     public void walkList(Consumer<T> consumer) {
-        for(Node<T> node = m_head; node != null; node = node.next)
+        for(Node<T> node = head; node != null; node = node.next)
             consumer.accept(node.elem);
     }
 
     public boolean isEmpty() {
-        return m_head == null;
+        return head == null;
     }
 
     public Optional<T> getItemHead() {
-        return isEmpty() ? Optional.empty(): Optional.of(m_head.elem);
+        return isEmpty() ? Optional.empty(): Optional.of(head.elem);
     }
 
     public Optional<T> getItemTail() {
-        return isEmpty() ? Optional.empty(): Optional.of(m_tail.elem);
+        return isEmpty() ? Optional.empty(): Optional.of(tail.elem);
     }
 
     public T get(int index) {
-        if (m_head == null || index < 0 || index >= size())
+        if (head == null || index < 0 || index >= size())
             throw new IllegalArgumentException("Invalid index");
 
-        Node<T> curNode = m_head;
+        Node<T> curNode = head;
 
         for (int i = 0; i < index; i++, curNode = curNode.next);
 
@@ -146,9 +200,9 @@ public class DLinkedList<T> {
     }
 
     public void insertItem(int pos, T value) {
-        if (m_head == null || pos < 0 || pos > m_size)
+        if (head == null || pos < 0 || pos > size)
            throw new IndexOutOfBoundsException("Invalid index");
-        Node<T> curNode = m_head;
+        Node<T> curNode = head;
 
         for (int i = 0; i < pos; i++, curNode = curNode.next);
 
@@ -157,23 +211,23 @@ public class DLinkedList<T> {
         curNode.next = newNode;
         newNode.prev = curNode;
 
-        m_size++;
+        size++;
     }
 
     public void walkListReversed(Consumer<T> consumer) {
-        for (Node<T> node = m_tail; node != null; node = node.prev)
+        for (Node<T> node = tail; node != null; node = node.prev)
             consumer.accept(node.elem);
     }
 
     public Optional<T> walkList(Predicate<T> predicate) {
-        for (Node<T> node = m_head; node != null; node = node.next)
+        for (Node<T> node = head; node != null; node = node.next)
             if (predicate.test(node.elem))
                 return Optional.of(node.elem);
         return Optional.empty();
     }
 
     public Optional<T> walkListReversed(Predicate<T> predicate) {
-        for (Node<T> node = m_tail; node != null; node = node.prev)
+        for (Node<T> node = tail; node != null; node = node.prev)
             if (predicate.test(node.elem))
                 return Optional.of(node.elem);
         return Optional.empty();

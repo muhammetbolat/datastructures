@@ -79,6 +79,7 @@ public class DLinkedListHeadTest {
     public void findTheFirst() {
         // given
         DLinkedList<String> linkedList = new DLinkedList<>();
+        String actual = "Ali";
 
         // then
         for (String srtVal: m_list)
@@ -87,7 +88,7 @@ public class DLinkedListHeadTest {
         Optional<String> result = linkedList.walkList(val -> val.length() == 3);
 
         assertTrue(result.isPresent());
-        assertEquals(result.get(), "Ali");
+        assertEquals(result.get(), actual);
     }
 
     @Test

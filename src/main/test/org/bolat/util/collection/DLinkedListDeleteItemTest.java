@@ -36,6 +36,7 @@ public class DLinkedListDeleteItemTest {
         linkedList = new DLinkedList<>();
         m_list.forEach(linkedList::addItemTail);
     }
+
     @Test
     public void insertItemTest() {
         // given
