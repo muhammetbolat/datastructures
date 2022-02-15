@@ -4,8 +4,6 @@ import org.bolat.util.collection.CircularQueue;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Arrays;
-
 public class CircularQueueWalkTest {
     @Test
     public void addWalkTest() {
