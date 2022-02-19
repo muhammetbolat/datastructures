@@ -3,21 +3,21 @@ package org.bolat.util.collection;
 import java.util.Optional;
 
 public class LinkedListQueue<T> {
-    private final DLinkedList<T> dLinkedList = new DLinkedList<>();
+    private final DoublyLinkedList<T> doublyLinkedList = new DoublyLinkedList<>();
 
     public T getItem() {
-        Optional<T> result = dLinkedList.getItemHead();
-        dLinkedList.removeHead();
+        Optional<T> result = doublyLinkedList.getItemHead();
+        doublyLinkedList.removeHead();
         return result.orElse(null);
     }
     public void putItem(T elem) {
-        dLinkedList.addItemTail(elem);
+        doublyLinkedList.addItemTail(elem);
     }
     public int size() {
-        return dLinkedList.size();
+        return doublyLinkedList.size();
     }
 
     public void clear() {
-        dLinkedList.clear();
+        doublyLinkedList.clear();
     }
 }

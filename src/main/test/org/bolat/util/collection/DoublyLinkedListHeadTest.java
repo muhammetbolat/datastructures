@@ -14,10 +14,10 @@ import java.util.Optional;
 import static org.junit.Assert.*;
 
 @RunWith(Parameterized.class)
-public class DLinkedListTailTest {
+public class DoublyLinkedListHeadTest {
     private final ArrayList<String> m_list;
 
-    public DLinkedListTailTest(ArrayList<String> list) throws IOException {
+    public DoublyLinkedListHeadTest(ArrayList<String> list) throws IOException {
         m_list = list;
         try(var bw = Files.newBufferedWriter(Path.of("test.txt"))) {
             for (String val: list)
@@ -35,43 +35,41 @@ public class DLinkedListTailTest {
     }
 
     @Test
-    public void addItemTailTest(){
+    public void addItemHeadTest(){
         // given
-        DLinkedList<String> linkedList = new DLinkedList<>();
+        DoublyLinkedList<String> linkedList = new DoublyLinkedList<>();
 
         // then
         for (String strVal: m_list) {
-            linkedList.addItemTail(strVal);
+            linkedList.addItemHead(strVal);
         }
-
+        //linkedList.walkList(System.out::println);
         // expected
         assertEquals(linkedList.size(), m_list.size());
     }
 
     @Test
-    public void removeTailIsNull() {
+    public void removeHeadIsNull() {
         // given
-        DLinkedList<Integer> linkedList = new DLinkedList<>();
-        var result = linkedList.removeTail();
-
-        // then
+        DoublyLinkedList<Integer> linkedList = new DoublyLinkedList<>();
+        var result = linkedList.removeHead();
 
         // expected
         assertNull(result);
     }
 
     @Test
-    public void removeTail() {
+    public void removeHead() {
         // given
-        DLinkedList<String> linkedList = new DLinkedList<>();
+        DoublyLinkedList<String> linkedList = new DoublyLinkedList<>();
 
         // then
         for (String strVal: m_list) {
-            linkedList.addItemTail(strVal);
+            linkedList.addItemHead(strVal);
         }
 
 
-        String result = linkedList.removeTail();
+        String result = linkedList.removeHead();
 
         // expected
         assertEquals(result, m_list.get(m_list.size() - 1));
@@ -80,31 +78,32 @@ public class DLinkedListTailTest {
     @Test
     public void findTheFirst() {
         // given
-        DLinkedList<String> linkedList = new DLinkedList<>();
-        String actual = "Can";
+        DoublyLinkedList<String> linkedList = new DoublyLinkedList<>();
+        String actual = "Ali";
 
         // then
         for (String srtVal: m_list)
             linkedList.addItemHead(srtVal);
 
-        Optional<String> result = linkedList.walkListReversed(val -> val.length() == 3);
+        Optional<String> result = linkedList.walkList(val -> val.length() == 3);
 
-        // expected
         assertTrue(result.isPresent());
         assertEquals(result.get(), actual);
     }
 
     @Test
     public void clear() {
-        DLinkedList<String> linkedList = new DLinkedList<>();
+        // given
+        DoublyLinkedList<String> linkedList = new DoublyLinkedList<>();
 
         // then
-        for (String srtVal: m_list)
-            linkedList.addItemHead(srtVal);
+        for (String strVal: m_list)
+            linkedList.addItemHead(strVal);
+        linkedList.clearFromHead();
 
-        linkedList.clearFromTail();
-
+        // expected
         assertEquals(0, linkedList.size());
+
     }
 
 }

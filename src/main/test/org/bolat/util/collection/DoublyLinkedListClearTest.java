@@ -7,18 +7,15 @@ import org.junit.runners.Parameterized;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Random;
-import java.util.function.Consumer;
 
 import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
-public class DLinkedListDeleteItemTest {
-
+public class DoublyLinkedListClearTest {
     private final ArrayList<String> m_list;
-    private DLinkedList<String> linkedList;
+    private DoublyLinkedList<String> linkedList;
 
-    public DLinkedListDeleteItemTest(ArrayList<String> list) {
+    public DoublyLinkedListClearTest(ArrayList<String> list) {
         m_list = list;
     }
 
@@ -33,28 +30,17 @@ public class DLinkedListDeleteItemTest {
 
     @Before
     public void setUp() {
-        linkedList = new DLinkedList<>();
+        linkedList = new DoublyLinkedList<>();
         m_list.forEach(linkedList::addItemTail);
     }
-
     @Test
-    public void insertItemTest() {
+    public void clearTest() {
         // given
-        Random random = new Random();
-        int randomIndex = random.nextInt(linkedList.size());
 
         // then
-        //linkedList.walkList((Consumer<String>) System.out::println);
-        linkedList.insertItem(randomIndex, "Bolat");
-
-        String val = linkedList.get(randomIndex);
-
-        linkedList.walkList((Consumer<String>) System.out::println);
-
+        linkedList.clear();
 
         // expected
-        assertEquals(val, m_list.get(randomIndex));
+        assertEquals(0, linkedList.size());
     }
-
-
 }

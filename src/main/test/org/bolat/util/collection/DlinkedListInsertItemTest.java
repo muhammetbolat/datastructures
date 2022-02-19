@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(Parameterized.class)
 public class DlinkedListInsertItemTest {
     private final ArrayList<String> m_list;
-    private DLinkedList<String> linkedList;
+    private DoublyLinkedList<String> linkedList;
 
     public DlinkedListInsertItemTest(ArrayList<String> list) {
         m_list = list;
@@ -30,7 +30,7 @@ public class DlinkedListInsertItemTest {
 
     @Before
     public void setUp() {
-        linkedList = new DLinkedList<>();
+        linkedList = new DoublyLinkedList<>();
         m_list.forEach(linkedList::addItemTail);
     }
     @Test

@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class DLinkedList<T> implements Iterable<T> {
+public class DoublyLinkedList<T> implements Iterable<T> {
     private int size;
     private Node<T> head;
     private Node<T> tail;
@@ -40,7 +40,7 @@ public class DLinkedList<T> implements Iterable<T> {
         }
 
     }
-    public DLinkedList() {
+    public DoublyLinkedList() {
         size = 0;
     }
 
